@@ -1,6 +1,9 @@
 import streamlit as st
 from datetime import datetime
 import requests
+import os
+
+api_key = os.getenv("NOAA_API_KEY")
 
 
 def dms_to_decimal(degrees, minutes, seconds):
@@ -28,7 +31,7 @@ def get_magnetic_field(lat, lon, date):
         "startYear": date.year,
         "startMonth": date.month,
         "startDay": date.day,
-        "key": "EAU2y",
+        "key": api_key,
         "resultFormat": "json",
     }
 
