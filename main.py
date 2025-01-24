@@ -66,6 +66,16 @@ def main():
     st.set_page_config(page_title="Calculadora de Campo Magnético", layout="wide")
     st.title("Calculadora de Campo Magnético (IGRF)")
 
+    # Avisos importantes
+    st.warning(
+        """
+        **Atenção:**
+        - Este aplicativo utiliza o sistema de referência SIRGAS2000 para conversões UTM.
+        - Certifique-se de selecionar a **zona UTM correta** para seu local (válida para o hemisfério sul entre as zonas 18 e 25).
+        - Northing e Easting são valores em metros no sistema UTM.
+        """
+    )
+
     # Escolha do tipo de entrada
     st.subheader("Escolha o Tipo de Entrada")
     input_type = st.radio("Tipo de coordenadas para entrada:", ["Latitude/Longitude", "Northing/Easting"], index=0)
@@ -117,7 +127,10 @@ def main():
             zone = st.number_input("Zona UTM (18 a 25)", min_value=18, max_value=25, value=23, step=1, key="zone")
 
         # Converter UTM para Latitude/Longitude em tempo real
-        lat_decimal, lon_decimal = utm_to_latlon(northing, easting, zone)
+        try:
+            lat_decimal, lon_decimal = utm_to_latlon(northing, easting, zone)
+        except ValueError as e:
+            st.error(str(e))
 
     # Data
     st.subheader("Data")
